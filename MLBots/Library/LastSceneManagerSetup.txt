@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Pyramids/Scenes/VisualPyramids.unity
+- path: Assets/Scenes/VisualTrainer_Generic.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

@@ -9,6 +9,10 @@ public class Projectile : MonoBehaviour
 
     public GameObject parentAgent; // agent who fired the shot, for scoring
 
+    void Start(){
+        Destroy(gameObject, 15);
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -18,7 +22,7 @@ public class Projectile : MonoBehaviour
     void OnCollisionEnter(Collision col){
         // If projectile collided with agent, decrease agent health, reward parentAgent
         if(col.gameObject.CompareTag("agent") && col.gameObject != parentAgent){
-            parentAgent.GetComponent<VisualAgent_FPS>().AddReward(1f);
+            parentAgent.GetComponent<VisualAgent_FPS>().AddReward(100f);
             col.gameObject.GetComponent<VisualAgent_FPS>().SetHealth(damage);
         }
         // destroy projectile

@@ -30,6 +30,8 @@ public class VisualAgent_FPS : Agent
     public int fireDelay = 20;
     public int fireCount = 0;
     public bool isFiring = false;
+    public bool isGrounded = false;
+    public Collider myCol;
 
     // animation controls
     Animator animator;
@@ -41,6 +43,9 @@ public class VisualAgent_FPS : Agent
     Vector2 smoothV;
     Vector2 mouseLook;
     public float speedScale = 0.2f;
+
+    // keep child close
+    public GameObject model;
 
     void Start(){
         animator = GetComponentInChildren<Animator>();
@@ -66,6 +71,7 @@ public class VisualAgent_FPS : Agent
 
     public void MoveAgent(float[] act)
     {
+        model.transform.localPosition = new Vector3(0,-3.25f,0);
         //var dirToGo = Vector3.zero;
         var zDir = 0.0f;
         var xDir = 0.0f;
@@ -84,6 +90,10 @@ public class VisualAgent_FPS : Agent
         var upDown = 0.0f;
         var leftRight = 0.0f;
 
+        // check if agent is grounded
+        Vector3 capsuleCast = new Vector3(myCol.bounds.center.x,myCol.bounds.min.y-0.1f,myCol.bounds.center.z);
+        isGrounded = Physics.CheckCapsule(myCol.bounds.center,capsuleCast,0.4f, 1);
+        
         switch (navigation)
         {
             case 1:
@@ -118,7 +128,12 @@ public class VisualAgent_FPS : Agent
                 walk = true;
                 crouch = false;
                 break;
-
+            case 0:
+                fire = false;
+                jump = false;
+                walk = false;
+                crouch = false;
+                break;
         }
 
         switch(jumpCrouch){
@@ -126,7 +141,11 @@ public class VisualAgent_FPS : Agent
                 //dirToGo = transform.up * 1;
                 //yDir = 1f;
                 fire = false;
-                jump = true;
+
+                if(isGrounded)
+                    jump = true;
+                else
+                    jump = false;
                 walk = false;
                 crouch = false;
                 break;
@@ -169,9 +188,9 @@ public class VisualAgent_FPS : Agent
         }
 
         // update animation states
-        animator.SetBool("walking", walk);
+        animator.SetBool("running", walk);
         animator.SetBool("jumping", jump);
-        animator.SetBool("crouching", crouch);
+        //animator.SetBool("crouching", crouch);
         animator.SetBool("shooting", fire);
 
 
@@ -186,8 +205,11 @@ public class VisualAgent_FPS : Agent
         transform.rotation = Quaternion.Euler(0,mouseLook.x,0);
         //transform.localRotation = Quaternion.AngleAxis(mouseLook.x*5, transform.up);
         transform.Translate(xDir, 0, zDir);
-        if(jump){
-            this.GetComponent<Rigidbody>().AddForce(Vector3.up*200);
+        
+        //Debug.Log(isGrounded);
+        if(jump && isGrounded){
+            //Debug.Log("JUMP");
+            this.GetComponent<Rigidbody>().AddForce(Vector3.up*100);
         }
         //m_AgentRb.AddForce(dirToGo * 2f, ForceMode.VelocityChange);
 

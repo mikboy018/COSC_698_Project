@@ -9,7 +9,7 @@ public class AmmoPack : MonoBehaviour
     void OnCollisionEnter(Collision col){
         // If projectile collided with agent, decrease agent health, reward parentAgent
         if(col.gameObject.CompareTag("agent")){
-            col.gameObject.GetComponent<VisualAgent_FPS>().AddReward(1f);
+            col.gameObject.GetComponent<VisualAgent_FPS>().AddReward(15f);
             col.gameObject.GetComponent<VisualAgent_FPS>().SetAmmo(ammoCount);
             gameObject.SetActive(false);
             Invoke("reactivate", 10.0f); // re-enable the object after 10 seconds
