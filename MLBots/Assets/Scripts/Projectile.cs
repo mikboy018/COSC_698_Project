@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
     void OnCollisionEnter(Collision col){
         // If projectile collided with agent, decrease agent health, reward parentAgent
         if(col.gameObject.CompareTag("agent") && col.gameObject != parentAgent){
-            parentAgent.GetComponent<VisualAgent_FPS>().AddReward(100f);
+            parentAgent.GetComponent<VisualAgent_FPS>().AddReward(1000f);
             col.gameObject.GetComponent<VisualAgent_FPS>().SetHealth(damage);
         }
         // destroy projectile

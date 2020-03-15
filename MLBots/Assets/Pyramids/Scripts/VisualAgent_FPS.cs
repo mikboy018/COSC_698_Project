@@ -67,6 +67,7 @@ public class VisualAgent_FPS : Agent
             // 
             sensor.AddObservation(transform.InverseTransformDirection(m_AgentRb.velocity));
         }
+
     }
 
     public void MoveAgent(float[] act)
@@ -201,11 +202,25 @@ public class VisualAgent_FPS : Agent
         mouseLook += smoothV;
         mouseLook.y = Mathf.Clamp(mouseLook.y, -75f, 75f);
 
+
+        if(xDir == 0 || zDir == 0){
+            AddReward(-0.00001f);
+        }
+
+        if(Mathf.Abs(mouseLook.x) < 0.01f){
+            AddReward(-0.00001f);
+        }
+
         agentCamera.transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
         transform.rotation = Quaternion.Euler(0,mouseLook.x,0);
         //transform.localRotation = Quaternion.AngleAxis(mouseLook.x*5, transform.up);
         transform.Translate(xDir, 0, zDir);
         
+        if(agentCamera.transform.localRotation.x > 10 || agentCamera.transform.localRotation.x < -10)
+            AddReward(-0.01f);
+        if(agentCamera.transform.localRotation.x > 20 || agentCamera.transform.localRotation.x < -20)
+            AddReward(-0.1f);
+
         //Debug.Log(isGrounded);
         if(jump && isGrounded){
             //Debug.Log("JUMP");
