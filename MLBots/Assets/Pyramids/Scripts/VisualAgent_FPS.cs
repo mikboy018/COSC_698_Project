@@ -38,17 +38,29 @@ public class VisualAgent_FPS : Agent
 
     // camera
     public Camera agentCamera;
-    public float sensitivity = 5.0f;
+    public float sensitivityH = 100.0f;
+    public float sensitivityV = 25.0f;
     public float smoothing = 2.0f;
     Vector2 smoothV;
     Vector2 mouseLook;
     public float speedScale = 0.2f;
 
+    public int deathCount = 0;
+    public int numDeaths = 0;
+
     // keep child close
     public GameObject model;
 
+    public int score = 0;
+    int angleCount = 0;
+
+    float xRot = 0f;
+
+    public int matchNum = 0;
+
     void Start(){
         animator = GetComponentInChildren<Animator>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public override void InitializeAgent()
@@ -73,6 +85,10 @@ public class VisualAgent_FPS : Agent
     public void MoveAgent(float[] act)
     {
         model.transform.localPosition = new Vector3(0,-3.25f,0);
+        model.transform.rotation = transform.rotation;
+        var camAngle = agentCamera.transform.localRotation;
+        camAngle.y = 0;
+        agentCamera.transform.localRotation = camAngle;
         //var dirToGo = Vector3.zero;
         var zDir = 0.0f;
         var xDir = 0.0f;
@@ -84,12 +100,9 @@ public class VisualAgent_FPS : Agent
         var shoot = Mathf.FloorToInt(act[2]);
 
         // look H will turn entire prefab
-        var lookH = Mathf.FloorToInt(act[3]);
+        var lookH = act[3];
         // look V will only move camera up/down
-        var lookV = Mathf.FloorToInt(act[4]);
-
-        var upDown = 0.0f;
-        var leftRight = 0.0f;
+        var lookV = act[4];
 
         // check if agent is grounded
         Vector3 capsuleCast = new Vector3(myCol.bounds.center.x,myCol.bounds.min.y-0.1f,myCol.bounds.center.z);
@@ -100,7 +113,7 @@ public class VisualAgent_FPS : Agent
             case 1:
                 //dirToGo = transform.forward * -1f;
                 zDir = 1f*speedScale;
-                fire = false;
+                //fire = false;
                 jump = false;
                 walk = true;
                 crouch = false;
@@ -108,7 +121,7 @@ public class VisualAgent_FPS : Agent
             case 2:
                 //dirToGo = transform.forward * 1f;
                 zDir = -1f*speedScale;
-                fire = false;
+                //fire = false;
                 jump = false;
                 walk = true;
                 crouch = false;
@@ -116,7 +129,7 @@ public class VisualAgent_FPS : Agent
             case 3:
                 //strafeDir = transform.right * 1f;
                 xDir = 1f*speedScale;
-                fire = false;
+                //fire = false;
                 jump = false;
                 walk = true;
                 crouch = false;
@@ -124,13 +137,13 @@ public class VisualAgent_FPS : Agent
             case 4:
                 //strafeDir = transform.right * -1f;
                 xDir = -1f*speedScale;
-                fire = false;
+                //fire = false;
                 jump = false;
                 walk = true;
                 crouch = false;
                 break;
             case 0:
-                fire = false;
+                //fire = false;
                 jump = false;
                 walk = false;
                 crouch = false;
@@ -162,13 +175,17 @@ public class VisualAgent_FPS : Agent
             switch(shoot){
                 case 1: // added fire
                     fire = true;
-                    jump = false;
-                    walk = false;
-                    crouch = false;
                     break;
             }   
         } 
-        switch(lookH){
+
+        if(Mathf.Abs(lookH) > 0.05f)
+            lookH *= sensitivityH * Time.fixedDeltaTime;
+        else
+            lookH = 0f;
+
+        lookV *= sensitivityV * Time.fixedDeltaTime;
+/*         switch(lookH){
             case 1: // added left/right looking (turning)
                 //rotateDir = transform.up * 1f;
                 leftRight = 1f;
@@ -181,12 +198,12 @@ public class VisualAgent_FPS : Agent
         // https://www.youtube.com/watch?v=blO039OzUZc
         switch(lookV){
             case 1: // added up/down looking (on camera transform)
-                upDown = 1.0f*speedScale;
+                upDown = -1.0f*Time.deltaTime;
                 break;
             case 2:
-                upDown = -1.0f*speedScale;
+                upDown = 1.0f*Time.deltaTime;
                 break;
-        }
+        } */
 
         // update animation states
         animator.SetBool("running", walk);
@@ -195,32 +212,68 @@ public class VisualAgent_FPS : Agent
         animator.SetBool("shooting", fire);
 
 
-        var mouseDir = new Vector2(leftRight, upDown);
+        /* var mouseDir = new Vector2(leftRight, upDown);
         mouseDir = Vector2.Scale(mouseDir, new Vector2(sensitivity*smoothing, sensitivity*smoothing));
-        smoothV.x = Mathf.Lerp(smoothV.x, mouseDir.x, 1f*smoothing);
+        smoothV.x = Mathf.Lerp(smoothV.x, mouseDir.x, 1f/(5*smoothing));
         smoothV.y = Mathf.Lerp(smoothV.y, mouseDir.y, 1f/smoothing);
         mouseLook += smoothV;
-        mouseLook.y = Mathf.Clamp(mouseLook.y, -75f, 75f);
+        mouseLook.y = Mathf.Clamp(mouseLook.y, -45f, 45f); */
 
 
         if(xDir == 0 || zDir == 0){
-            AddReward(-0.00001f);
+            AddReward(-0.01f);
         }
 
-        if(Mathf.Abs(mouseLook.x) < 0.01f){
-            AddReward(-0.00001f);
+        xRot -= lookV;
+        xRot = Mathf.Clamp(xRot, -80f, 80f);
+
+        if(Mathf.Abs(xRot) > 45){
+            AddReward(-0.05f);
         }
 
-        agentCamera.transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
-        transform.rotation = Quaternion.Euler(0,mouseLook.x,0);
-        //transform.localRotation = Quaternion.AngleAxis(mouseLook.x*5, transform.up);
+        agentCamera.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
+        transform.Rotate(Vector3.up, Mathf.Clamp(lookH,-360,360));
+
+ /*        if(Mathf.Abs(mouseLook.x) < 0.01f){
+            AddReward(-0.00001f);
+        } */
+
+        //agentCamera.transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
+        //transform.rotation = Quaternion.Euler(0,mouseLook.x,0);
+        //var cameraAngle = agentCamera.transform.localRotation;
+        //cameraAngle.x += upDown;
+        //Mathf.Clamp(cameraAngle.x, -30f, 30f);
+
+        
+        /* var myX = transform.rotation;
+        myX.y += leftRight;
+        transform.rotation = myX; */
+        //transform.Rotate(0,leftRight, 0);
+        
         transform.Translate(xDir, 0, zDir);
         
-        if(agentCamera.transform.localRotation.x > 10 || agentCamera.transform.localRotation.x < -10)
-            AddReward(-0.01f);
-        if(agentCamera.transform.localRotation.x > 20 || agentCamera.transform.localRotation.x < -20)
-            AddReward(-0.1f);
+        /*if(agentCamera.transform.localRotation.x <= 45 || agentCamera.transform.localRotation.x >= 135){
+            AddReward(-0.2f);
+            angleCount++;
+            if(angleCount > 50){
+                cameraAngle.x = 0;
+                angleCount = 0;
+            }
+        if(agentCamera.transform.localRotation.x >= 50 || agentCamera.transform.localRotation.x <= -140)
+        {    
+            AddReward(-0.5f);
+            if(agentCamera.transform.localRotation.x >= 50){
+                cameraAngle.x = 49;
+            } else {
+                cameraAngle.x = -49;
+            }
+        }
+        } else {
+            angleCount = 0;
+        } */
 
+        //agentCamera.transform.localRotation = cameraAngle;
+        
         //Debug.Log(isGrounded);
         if(jump && isGrounded){
             //Debug.Log("JUMP");
@@ -272,8 +325,8 @@ public class VisualAgent_FPS : Agent
         int navAction = 0;
         int jumpCrouchAction = 0;
         int shootAction = 0;
-        int lookLR = 0;
-        int lookUD = 0;
+        float lookLR = 0f;
+        float lookUD = 0f;
         
 
         if (Input.GetKey(KeyCode.D))
@@ -300,33 +353,42 @@ public class VisualAgent_FPS : Agent
             //return new float[] { 5 }; // Jump
             jumpCrouchAction = 1;
         }
-        if (Input.GetKey(KeyCode.C)){
+/*         if (Input.GetKey(KeyCode.C)){
             //return new float[] { 6 }; // Crouch
             jumpCrouchAction = 2;
-        }
-        if (Input.GetKey(KeyCode.Z)){
+        } */
+        if (Input.GetKey(KeyCode.Mouse0)){
             //return new float[] { 7 };  // Fire
             shootAction = 1;
         }
 
-        if(Input.GetAxisRaw("Mouse X") > 0){
+/*         if(Input.GetKey(KeyCode.RightArrow)){
             lookLR = 1;
-        } else if (Input.GetAxisRaw("Mouse X") < 0){
+        } else if (Input.GetKey(KeyCode.LeftArrow))
+        {
             lookLR = 2;
         }
 
-        if(Input.GetAxisRaw("Mouse Y") > 0)
+        if(Input.GetKey(KeyCode.UpArrow))
         {
             lookUD = 1;
-        } else if (Input.GetAxisRaw("Mouse Y") < 0){
+        } else if (Input.GetKey(KeyCode.DownArrow))
+        {
             lookUD = 2;
-        }
+        } */
+
+
+        lookLR = Input.GetAxis("Mouse X");
+        lookUD = Input.GetAxis("Mouse Y");
+
+
         //return new float[] { 0 };
         return new float[] { navAction, jumpCrouchAction, shootAction, lookLR, lookUD };
     }
 
     public override void AgentReset()
     {
+        matchNum++; // shows how many times a match has completed (10 frags to first player)
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
         var items = enumerable.ToArray();
 
@@ -335,6 +397,7 @@ public class VisualAgent_FPS : Agent
         m_AgentRb.velocity = Vector3.zero;
         m_MyArea.PlaceObject(gameObject, items[0]);
         transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
+        
 
         //m_SwitchLogic.ResetSwitch(items[1], items[2]);
         m_MyArea.CreateStonePyramid(1, items[3]);
@@ -348,6 +411,14 @@ public class VisualAgent_FPS : Agent
         health = 100;
     }
 
+    void respawn(){
+        var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
+        var items = enumerable.ToArray();
+        m_AgentRb.velocity = Vector3.zero;
+        transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
+        m_MyArea.PlaceObject(gameObject, items[0]);
+    }
+
 // need to move this to scripts for ammo/health
     void OnCollisionEnter(Collision collision)
     {
@@ -359,17 +430,37 @@ public class VisualAgent_FPS : Agent
         }
     } 
 
-    public void SetHealth(int damage){
+    public bool SetHealth(int damage){
         health -= damage;
 
         if(health <= 0){
             AddReward(-5f); // motivate AI to not die
-            AgentReset();
+            //AgentReset();
+            deathCount++;
+            numDeaths++;
+
+            if(deathCount == 10){
+                deathCount = 0;
+                AgentReset();
+                
+            } else{
+                AddReward(-1f);
+                respawn();
+                
+            }
+
+            return true;
         }
 
         if(health >= 100){
             health = 100;
         }
+
+        return false; // returns false if player still alive
+    }
+
+    public void AddScore(int increment){
+        score += increment;
     }
 
     public void SetAmmo(int ammo){
@@ -378,6 +469,10 @@ public class VisualAgent_FPS : Agent
         if(ammo >= 200){
             ammo = 200;
         }
+    }
+
+    void OnApplicationQuit(){
+        Debug.Log("Player: " + gameObject.name + " Score: " + score);
     }
 
 }
