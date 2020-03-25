@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
     public int damage = 50;
     public float speed = 10;
     public bool playerKilled = false;
+    bool playerHit = false;
 
     public GameObject parentAgent; // agent who fired the shot, for scoring
 
@@ -24,17 +25,23 @@ public class Projectile : MonoBehaviour
 
         // If projectile collided with agent, decrease agent health, reward parentAgent
         if(col.gameObject.CompareTag("agent") && col.gameObject != parentAgent){
-            parentAgent.GetComponent<VisualAgent_FPS>().AddReward(5f);
+            playerHit = true;
+            parentAgent.GetComponent<VisualAgent_FPS>().AddReward(0.5f);
+            Debug.Log("Player Hit");
             playerKilled = col.gameObject.GetComponent<VisualAgent_FPS>().SetHealth(damage);
             if(playerKilled){
-                parentAgent.GetComponent<VisualAgent_FPS>().AddReward(20f);
+                parentAgent.GetComponent<VisualAgent_FPS>().AddReward(1f);
                 parentAgent.GetComponent<VisualAgent_FPS>().AddScore(1);
             }
-        } else {
-            parentAgent.GetComponent<VisualAgent_FPS>().AddReward(-1f); // penalized for missed shot
-        }
+        } 
 
         // destroy projectile
         Destroy(gameObject);
     }
+
+    /* void OnDestroy(){
+        if(!playerHit){
+            parentAgent.GetComponent<VisualAgent_FPS>().AddReward(-0.005f);
+        }
+    } */
 }

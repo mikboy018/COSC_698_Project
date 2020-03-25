@@ -26,7 +26,8 @@ public class VisualAgent_FPS : Agent
     public int health = 100;
 
     // ammo
-    public int ammoCount = 100;
+    public int ammoCount = 1000;
+    public int maxAmmoCount = 1000;
     public int fireDelay = 20;
     public int fireCount = 0;
     public bool isFiring = false;
@@ -58,9 +59,12 @@ public class VisualAgent_FPS : Agent
 
     public int matchNum = 0;
 
+    public bool playerControl = false;
+
     void Start(){
         animator = GetComponentInChildren<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
+        agentCamera.transform.localRotation = Quaternion.Euler(-80,0,0);
     }
 
     public override void InitializeAgent()
@@ -80,12 +84,20 @@ public class VisualAgent_FPS : Agent
             sensor.AddObservation(transform.InverseTransformDirection(m_AgentRb.velocity));
         }
 
+        sensor.AddObservation(health);
+        sensor.AddObservation(ammoCount);
+        sensor.AddObservation(score);
+        sensor.AddObservation(deathCount);
+        sensor.AddObservation(this.transform.position);
+        sensor.AddObservation(this.transform.rotation);
+        sensor.AddObservation(agentCamera.transform.localRotation);
+
     }
 
     public void MoveAgent(float[] act)
     {
-        model.transform.localPosition = new Vector3(0,-3.25f,0);
-        model.transform.rotation = transform.rotation;
+        //model.transform.localPosition = new Vector3(0,-3.25f,0);
+        //model.transform.rotation = transform.rotation;
         var camAngle = agentCamera.transform.localRotation;
         camAngle.y = 0;
         agentCamera.transform.localRotation = camAngle;
@@ -100,9 +112,9 @@ public class VisualAgent_FPS : Agent
         var shoot = Mathf.FloorToInt(act[2]);
 
         // look H will turn entire prefab
-        var lookH = act[3];
+        var lookH = 0f;
         // look V will only move camera up/down
-        var lookV = act[4];
+        var lookV = 0f;
 
         // check if agent is grounded
         Vector3 capsuleCast = new Vector3(myCol.bounds.center.x,myCol.bounds.min.y-0.1f,myCol.bounds.center.z);
@@ -179,31 +191,68 @@ public class VisualAgent_FPS : Agent
             }   
         } 
 
-        if(Mathf.Abs(lookH) > 0.05f)
-            lookH *= sensitivityH * Time.fixedDeltaTime;
-        else
-            lookH = 0f;
+        if(playerControl)
+        {
+            lookH = act[3];
+            lookV = act[4];
+            lookH *= sensitivityH * Time.fixedDeltaTime * 2;
+            lookV *= sensitivityV * Time.fixedDeltaTime * 2;
+        } else 
+        {
+            // lookH and lookV are grouped by 0, 1-10, 11-20 for a total of 21 values
+/*             if(act[3] != 0){
+                // 1-10
+                if(act[3] < 11){
+                    lookH = act[3];
+                } else { //11-20
+                    lookH = act[3]-10; // 11 => 1, 12 => 2, ..., 20 => 10, but must flip sign
+                    lookH = -lookH;
+                }
+            } // 0
+             else {
+                lookH = 0;
+            } */
+            switch(act[3]){
+                case 0:
+                    lookH = 0;
+                    break;
+                case 1:
+                    lookH = 200f * Time.fixedDeltaTime;
+                    break;
+                case 2:
+                    lookH = -200f * Time.fixedDeltaTime;
+                    break;
+            }
 
-        lookV *= sensitivityV * Time.fixedDeltaTime;
-/*         switch(lookH){
-            case 1: // added left/right looking (turning)
-                //rotateDir = transform.up * 1f;
-                leftRight = 1f;
-                break;
-            case 2: 
-                //rotateDir = transform.up * -1f;
-                leftRight = -1f;
-                break;
+            if(act[4] != 0){
+                // 1 up
+                if(act[4] == 1 ){
+                    lookV = act[4];
+                } else { // 2 down
+                    lookV = act[4]/2; 
+                    lookV = -lookV;
+                }
+            } // 0
+             else {
+                lookV = 0;
+            }
         }
-        // https://www.youtube.com/watch?v=blO039OzUZc
-        switch(lookV){
-            case 1: // added up/down looking (on camera transform)
-                upDown = -1.0f*Time.deltaTime;
-                break;
-            case 2:
-                upDown = 1.0f*Time.deltaTime;
-                break;
-        } */
+
+        xRot -= lookV;
+        
+        if(Mathf.Abs(xRot) > 25){
+            AddReward(-0.05f);
+        }
+
+        xRot = Mathf.Clamp(xRot, -45f, 45f);
+
+        agentCamera.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
+        transform.Rotate(Vector3.up, lookH);
+       
+        if(jump && isGrounded){
+            //Debug.Log("JUMP");
+            this.GetComponent<Rigidbody>().AddForce(Vector3.up*100);
+        }
 
         // update animation states
         animator.SetBool("running", walk);
@@ -211,76 +260,17 @@ public class VisualAgent_FPS : Agent
         //animator.SetBool("crouching", crouch);
         animator.SetBool("shooting", fire);
 
-
-        /* var mouseDir = new Vector2(leftRight, upDown);
-        mouseDir = Vector2.Scale(mouseDir, new Vector2(sensitivity*smoothing, sensitivity*smoothing));
-        smoothV.x = Mathf.Lerp(smoothV.x, mouseDir.x, 1f/(5*smoothing));
-        smoothV.y = Mathf.Lerp(smoothV.y, mouseDir.y, 1f/smoothing);
-        mouseLook += smoothV;
-        mouseLook.y = Mathf.Clamp(mouseLook.y, -45f, 45f); */
-
-
-        if(xDir == 0 || zDir == 0){
+        // Navigation
+/*         if(xDir == 0 || zDir == 0){
             AddReward(-0.01f);
-        }
-
-        xRot -= lookV;
-        xRot = Mathf.Clamp(xRot, -80f, 80f);
-
-        if(Mathf.Abs(xRot) > 45){
-            AddReward(-0.05f);
-        }
-
-        agentCamera.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
-        transform.Rotate(Vector3.up, Mathf.Clamp(lookH,-360,360));
-
- /*        if(Mathf.Abs(mouseLook.x) < 0.01f){
-            AddReward(-0.00001f);
         } */
 
-        //agentCamera.transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
-        //transform.rotation = Quaternion.Euler(0,mouseLook.x,0);
-        //var cameraAngle = agentCamera.transform.localRotation;
-        //cameraAngle.x += upDown;
-        //Mathf.Clamp(cameraAngle.x, -30f, 30f);
-
-        
-        /* var myX = transform.rotation;
-        myX.y += leftRight;
-        transform.rotation = myX; */
-        //transform.Rotate(0,leftRight, 0);
+        if(xDir != 0 || zDir != 0){
+            AddReward(0.01f);
+        }
         
         transform.Translate(xDir, 0, zDir);
         
-        /*if(agentCamera.transform.localRotation.x <= 45 || agentCamera.transform.localRotation.x >= 135){
-            AddReward(-0.2f);
-            angleCount++;
-            if(angleCount > 50){
-                cameraAngle.x = 0;
-                angleCount = 0;
-            }
-        if(agentCamera.transform.localRotation.x >= 50 || agentCamera.transform.localRotation.x <= -140)
-        {    
-            AddReward(-0.5f);
-            if(agentCamera.transform.localRotation.x >= 50){
-                cameraAngle.x = 49;
-            } else {
-                cameraAngle.x = -49;
-            }
-        }
-        } else {
-            angleCount = 0;
-        } */
-
-        //agentCamera.transform.localRotation = cameraAngle;
-        
-        //Debug.Log(isGrounded);
-        if(jump && isGrounded){
-            //Debug.Log("JUMP");
-            this.GetComponent<Rigidbody>().AddForce(Vector3.up*100);
-        }
-        //m_AgentRb.AddForce(dirToGo * 2f, ForceMode.VelocityChange);
-
         if(isFiring){
             fireCount++;
             fire = false;
@@ -299,17 +289,14 @@ public class VisualAgent_FPS : Agent
                 projectileInstance.GetComponent<Projectile>().parentAgent = gameObject;
                 
                 ammoCount -= 1;
-                if(ammoCount <= 0){
-                    AddReward(-1f); // penalty for running out of ammo
-                }
-
+                float reward = 0.05f * (200-ammoCount)/200; // increases penalty as ammo lower
+/*                 if(ammoCount <= 0){
+                    AddReward(-0.05f); // penalty for running out of ammo
+                } */
+                
                 isFiring = true;
             }
-
         }
-
-
-
     }
 
     public override void AgentAction(float[] vectorAction)
@@ -377,10 +364,23 @@ public class VisualAgent_FPS : Agent
             lookUD = 2;
         } */
 
+        if(playerControl){
+            lookLR = Input.GetAxis("Mouse X");
+            lookUD = Input.GetAxis("Mouse Y");
+        } else {
 
-        lookLR = Input.GetAxis("Mouse X");
-        lookUD = Input.GetAxis("Mouse Y");
+            if(Input.GetKey(KeyCode.LeftArrow)){
+                lookLR = 2f;
+            } else if (Input.GetKey(KeyCode.RightArrow)){
+                lookLR = 1f;
+            }
 
+            if(Input.GetKey(KeyCode.UpArrow)){
+                lookUD = 1f;
+            } else if (Input.GetKey(KeyCode.DownArrow)){
+                lookUD = 2f;
+            }
+        }
 
         //return new float[] { 0 };
         return new float[] { navAction, jumpCrouchAction, shootAction, lookLR, lookUD };
@@ -388,6 +388,7 @@ public class VisualAgent_FPS : Agent
 
     public override void AgentReset()
     {
+        agentCamera.transform.localRotation = Quaternion.Euler(-80,0,0);
         matchNum++; // shows how many times a match has completed (10 frags to first player)
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
         var items = enumerable.ToArray();
@@ -407,7 +408,7 @@ public class VisualAgent_FPS : Agent
         m_MyArea.CreateStonePyramid(1, items[7]);
         m_MyArea.CreateStonePyramid(1, items[8]);
 
-        ammoCount = 50;
+        ammoCount = maxAmmoCount;
         health = 100;
     }
 
@@ -434,17 +435,16 @@ public class VisualAgent_FPS : Agent
         health -= damage;
 
         if(health <= 0){
-            AddReward(-5f); // motivate AI to not die
+            AddReward(-0.5f); // motivate AI to not die
             //AgentReset();
             deathCount++;
             numDeaths++;
-
+            Debug.Log(gameObject.name + ", was killed");
             if(deathCount == 10){
                 deathCount = 0;
                 AgentReset();
                 
             } else{
-                AddReward(-1f);
                 respawn();
                 
             }
@@ -466,8 +466,8 @@ public class VisualAgent_FPS : Agent
     public void SetAmmo(int ammo){
         ammoCount += ammo;
 
-        if(ammo >= 200){
-            ammo = 200;
+        if(ammoCount >= maxAmmoCount){
+            ammoCount = maxAmmoCount;
         }
     }
 
