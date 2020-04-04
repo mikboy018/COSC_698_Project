@@ -61,6 +61,10 @@ public class VisualAgent_FPS : Agent
 
     public bool playerControl = false;
 
+    // instead of adding a penalty for not moving, this allows us to detect change in movement, and reward
+    float prevXdir = 0f;
+    float prevZdir = 0f;
+
     void Start(){
         animator = GetComponentInChildren<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -264,10 +268,24 @@ public class VisualAgent_FPS : Agent
 /*         if(xDir == 0 || zDir == 0){
             AddReward(-0.01f);
         } */
-
-        if(xDir != 0 || zDir != 0){
+        
+        /*if(xDir != 0 || zDir != 0){
             AddReward(0.01f);
-        }
+        }*/
+        // updated 2 Apr to match F1 more closely
+        var xDist = Mathf.Abs(xDir - prevXdir);
+        if(xDist > 0)
+            AddReward(Mathf.Clamp(0.000045f*xDist, 0f, 8f)); // smaller values to encoure more forward motion
+
+        var zDist = Mathf.Abs(zDir - prevZdir);
+        if(zDist > 0)
+            AddReward(Mathf.Clamp(0.00009f*zDist, 0f, 15f));
+
+        if(xDist == 0 && zDist==0)
+            AddReward(-0.03f); // match f1 penalty for not moving
+        // store last value
+        prevXdir = xDir;
+        prevZdir = zDir;
         
         transform.Translate(xDir, 0, zDir);
         
@@ -289,11 +307,12 @@ public class VisualAgent_FPS : Agent
                 projectileInstance.GetComponent<Projectile>().parentAgent = gameObject;
                 
                 ammoCount -= 1;
-                float reward = 0.05f * (200-ammoCount)/200; // increases penalty as ammo lower
-/*                 if(ammoCount <= 0){
+                float reward = 0.0001f * (maxAmmoCount-ammoCount)/maxAmmoCount; // increases penalty as ammo lower
+                 if(ammoCount <= 0){
                     AddReward(-0.05f); // penalty for running out of ammo
-                } */
-                
+                }
+                // updated to match F1 -- agents learned to not shoot with this high of a reward
+                //AddReward(-0.04f);
                 isFiring = true;
             }
         }
@@ -301,7 +320,8 @@ public class VisualAgent_FPS : Agent
 
     public override void AgentAction(float[] vectorAction)
     {
-        AddReward(-1f / maxStep); // motivate AI to find positive reward faster
+        // matching F1 AddReward(-1f / maxStep); // motivate AI to find positive reward faster
+        AddReward(-0.008f);
         MoveAgent(vectorAction);
     }
 
@@ -410,6 +430,7 @@ public class VisualAgent_FPS : Agent
 
         ammoCount = maxAmmoCount;
         health = 100;
+        Debug.Log("Round: " + matchNum);
     }
 
     void respawn(){
@@ -426,16 +447,17 @@ public class VisualAgent_FPS : Agent
         // reward player for picking up health/ammo
          if (collision.gameObject.CompareTag("healthPack") || collision.gameObject.CompareTag("ammoPack"))
         {
-            AddReward(1f);
+            AddReward(.15f); // 2 apr was 1f, updated to align with F1 ammo pickup
             Done();
         }
     } 
 
     public bool SetHealth(int damage){
         health -= damage;
-
+        if(damage < 0) // penalty for taking damage
+            AddReward(0.05f*damage);
         if(health <= 0){
-            AddReward(-0.5f); // motivate AI to not die
+            //AddReward(-0.5f); // motivate AI to not die -- removed to align with f1, placing -0.05 penalty * projectile damage
             //AgentReset();
             deathCount++;
             numDeaths++;
