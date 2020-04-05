@@ -24,7 +24,7 @@ public class Projectile : MonoBehaviour
     void OnCollisionEnter(Collision col){
 
         // If projectile collided with agent, decrease agent health, reward parentAgent
-        if(col.gameObject.CompareTag("agent") && col.gameObject != parentAgent){
+/*         if(col.gameObject.CompareTag("agent") && col.gameObject != parentAgent){
             playerHit = true;
             parentAgent.GetComponent<VisualAgent_FPS>().AddReward(0.5f);
             Debug.Log("Player Hit");
@@ -32,16 +32,34 @@ public class Projectile : MonoBehaviour
             if(playerKilled){
                 parentAgent.GetComponent<VisualAgent_FPS>().AddReward(1f);
                 parentAgent.GetComponent<VisualAgent_FPS>().AddScore(1);
+                parentAgent.GetComponent<VisualAgent_FPS>().numKills++;
             }
-        } 
+        }  */
 
         // destroy projectile
-        Destroy(gameObject);
+        if(!col.gameObject.CompareTag("healthPack") && !col.gameObject.CompareTag("ammoPack")){
+            Destroy(gameObject);
+        }
     }
 
-    /* void OnDestroy(){
-        if(!playerHit){
-            parentAgent.GetComponent<VisualAgent_FPS>().AddReward(-0.005f);
+    void OnDestroy(){
+        // splash damage
+        areaDamage();
+    }
+
+    void areaDamage(){
+        Collider[] objs = Physics.OverlapSphere(transform.position, 5f);
+        int i = 0;
+        while(i < objs.Length){
+            if(objs[i].gameObject.CompareTag("agent") && objs[i].gameObject != parentAgent){
+                playerKilled = objs[i].gameObject.GetComponent<VisualAgent_FPS>().SetHealth(damage);
+                if(playerKilled){
+                    parentAgent.GetComponent<VisualAgent_FPS>().AddReward(1f);
+                    parentAgent.GetComponent<VisualAgent_FPS>().AddScore(1);
+                    parentAgent.GetComponent<VisualAgent_FPS>().numKills++;
+                }
+            }
+            i++;
         }
-    } */
+    }
 }

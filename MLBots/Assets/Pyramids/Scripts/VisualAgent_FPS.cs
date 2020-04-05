@@ -47,7 +47,7 @@ public class VisualAgent_FPS : Agent
     public float speedScale = 0.2f;
 
     public int deathCount = 0;
-    public int numDeaths = 0;
+    public int numKills = 0;
 
     // keep child close
     public GameObject model;
@@ -57,7 +57,7 @@ public class VisualAgent_FPS : Agent
 
     float xRot = 0f;
 
-    public int matchNum = 0;
+    public int matchNum = 1;
 
     public bool playerControl = false;
 
@@ -90,7 +90,7 @@ public class VisualAgent_FPS : Agent
 
         sensor.AddObservation(health);
         sensor.AddObservation(ammoCount);
-        sensor.AddObservation(score);
+        sensor.AddObservation(numKills);
         sensor.AddObservation(deathCount);
         sensor.AddObservation(this.transform.position);
         sensor.AddObservation(this.transform.rotation);
@@ -244,7 +244,7 @@ public class VisualAgent_FPS : Agent
 
         xRot -= lookV;
         
-        if(Mathf.Abs(xRot) > 25){
+        if(Mathf.Abs(xRot) > 20){
             AddReward(-0.05f);
         }
 
@@ -407,7 +407,11 @@ public class VisualAgent_FPS : Agent
     }
 
     public override void AgentReset()
-    {
+    {   
+        Debug.Log("Player: " + gameObject.name + " Kills this Round: " + numKills);
+        numKills = 0;
+        Debug.Log("Player: " + gameObject.name + " Total deaths: " + deathCount);
+        deathCount = 0;
         agentCamera.transform.localRotation = Quaternion.Euler(-80,0,0);
         matchNum++; // shows how many times a match has completed (10 frags to first player)
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
@@ -460,16 +464,18 @@ public class VisualAgent_FPS : Agent
             //AddReward(-0.5f); // motivate AI to not die -- removed to align with f1, placing -0.05 penalty * projectile damage
             //AgentReset();
             deathCount++;
-            numDeaths++;
+            health = 100;
+            ammoCount = maxAmmoCount;
+            //numDeaths++;
             Debug.Log(gameObject.name + ", was killed");
-            if(deathCount == 10){
-                deathCount = 0;
-                AgentReset();
+            //if(deathCount == 10){
+                //deathCount = 0;
+                //AgentReset();
                 
-            } else{
+            //} else{
                 respawn();
                 
-            }
+            //}
 
             return true;
         }
@@ -483,6 +489,12 @@ public class VisualAgent_FPS : Agent
 
     public void AddScore(int increment){
         score += increment;
+        if(numKills == 10){
+            //numKills = 0;
+            AddReward(5f); // won the match
+            //AgentReset();
+            Done();
+        }
     }
 
     public void SetAmmo(int ammo){
