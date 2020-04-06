@@ -60,6 +60,7 @@ public class VisualAgent_FPS : Agent
     public int matchNum = 1;
 
     public bool playerControl = false;
+    public GameObject manager;
 
     // instead of adding a penalty for not moving, this allows us to detect change in movement, and reward
     float prevXdir = 0f;
@@ -369,21 +370,6 @@ public class VisualAgent_FPS : Agent
             shootAction = 1;
         }
 
-/*         if(Input.GetKey(KeyCode.RightArrow)){
-            lookLR = 1;
-        } else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            lookLR = 2;
-        }
-
-        if(Input.GetKey(KeyCode.UpArrow))
-        {
-            lookUD = 1;
-        } else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            lookUD = 2;
-        } */
-
         if(playerControl){
             lookLR = Input.GetAxis("Mouse X");
             lookUD = Input.GetAxis("Mouse Y");
@@ -408,10 +394,7 @@ public class VisualAgent_FPS : Agent
 
     public override void AgentReset()
     {   
-        Debug.Log("Player: " + gameObject.name + " Kills this Round: " + numKills);
         numKills = 0;
-        Debug.Log("Player: " + gameObject.name + " Total deaths: " + deathCount);
-        deathCount = 0;
         agentCamera.transform.localRotation = Quaternion.Euler(-80,0,0);
         matchNum++; // shows how many times a match has completed (10 frags to first player)
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
@@ -452,7 +435,6 @@ public class VisualAgent_FPS : Agent
          if (collision.gameObject.CompareTag("healthPack") || collision.gameObject.CompareTag("ammoPack"))
         {
             AddReward(.15f); // 2 apr was 1f, updated to align with F1 ammo pickup
-            Done();
         }
     } 
 
@@ -467,7 +449,7 @@ public class VisualAgent_FPS : Agent
             health = 100;
             ammoCount = maxAmmoCount;
             //numDeaths++;
-            Debug.Log(gameObject.name + ", was killed");
+            //Debug.Log(gameObject.name + ", was killed");
             //if(deathCount == 10){
                 //deathCount = 0;
                 //AgentReset();
@@ -491,9 +473,14 @@ public class VisualAgent_FPS : Agent
         score += increment;
         if(numKills == 10){
             //numKills = 0;
+            Debug.Log("Player: " + gameObject.name + " Kills this Round: " + numKills);
+            numKills = 0;
+            Debug.Log("Player: " + gameObject.name + " Total deaths: " + deathCount);
+            deathCount = 0;
             AddReward(5f); // won the match
             //AgentReset();
-            Done();
+            //Done();
+            manager.GetComponent<GameManager>().ResetScenario();
         }
     }
 

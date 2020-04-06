@@ -55,8 +55,9 @@ public class Projectile : MonoBehaviour
                 playerKilled = objs[i].gameObject.GetComponent<VisualAgent_FPS>().SetHealth(damage);
                 if(playerKilled){
                     parentAgent.GetComponent<VisualAgent_FPS>().AddReward(1f);
-                    parentAgent.GetComponent<VisualAgent_FPS>().AddScore(1);
                     parentAgent.GetComponent<VisualAgent_FPS>().numKills++;
+                    parentAgent.GetComponent<VisualAgent_FPS>().AddScore(1);
+                    Debug.Log(parentAgent.name + " got a kill");
                 }
             }
             i++;

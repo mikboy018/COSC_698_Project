@@ -51,6 +51,7 @@
      <Compile Include="Assets\Pyramids\Scripts\VisualAgent_FPS.cs" />
      <Compile Include="Assets\Scripts\AgentSkin.cs" />
      <Compile Include="Assets\Scripts\AmmoPack.cs" />
+     <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\HealthPack.cs" />
      <Compile Include="Assets\Scripts\Projectile.cs" />
      <Compile Include="Assets\Scripts\SyncModel.cs" />
