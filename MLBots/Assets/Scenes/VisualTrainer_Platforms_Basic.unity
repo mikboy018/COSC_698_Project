@@ -446,7 +446,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: 242e04f509b9d5a09a3864729e5105a2,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_InferenceDevice
@@ -455,7 +456,12 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
+      objectReference: {fileID: 0}
+    - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7399991510622663767, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -948,7 +954,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: f8a9c143b108625ad82dee474b06a86b,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorType
@@ -957,7 +964,7 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
       objectReference: {fileID: 0}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -1297,7 +1304,7 @@ PrefabInstance:
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_Name
-      value: Agent (1)
+      value: PPO
       objectReference: {fileID: 0}
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -2435,7 +2442,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: f8a9c143b108625ad82dee474b06a86b,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorType
@@ -2444,7 +2452,7 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
       objectReference: {fileID: 0}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -2784,7 +2792,7 @@ PrefabInstance:
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_Name
-      value: Agent (4)
+      value: PPO4
       objectReference: {fileID: 0}
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -3058,7 +3066,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: f8a9c143b108625ad82dee474b06a86b,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorType
@@ -3067,7 +3076,7 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
       objectReference: {fileID: 0}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -3407,7 +3416,7 @@ PrefabInstance:
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_Name
-      value: Agent (3)
+      value: PPO3
       objectReference: {fileID: 0}
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -3600,7 +3609,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: 242e04f509b9d5a09a3864729e5105a2,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorType
@@ -3609,7 +3619,7 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
       objectReference: {fileID: 0}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -4557,7 +4567,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: f8a9c143b108625ad82dee474b06a86b,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_InferenceDevice
@@ -4566,7 +4577,12 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
+      objectReference: {fileID: 0}
+    - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7399991510622663767, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -4631,7 +4647,7 @@ PrefabInstance:
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_Name
-      value: Agent (5)
+      value: PPO5
       objectReference: {fileID: 0}
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -4815,7 +4831,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: f8a9c143b108625ad82dee474b06a86b,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorType
@@ -4824,7 +4841,7 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
       objectReference: {fileID: 0}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -5164,7 +5181,7 @@ PrefabInstance:
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_Name
-      value: Agent (2)
+      value: PPO2
       objectReference: {fileID: 0}
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -5351,7 +5368,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: 242e04f509b9d5a09a3864729e5105a2,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorType
@@ -5360,7 +5378,7 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
       objectReference: {fileID: 0}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -5993,7 +6011,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: 242e04f509b9d5a09a3864729e5105a2,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorType
@@ -6002,7 +6021,7 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
       objectReference: {fileID: 0}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -7345,11 +7364,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: f8a9c143b108625ad82dee474b06a86b,
+        type: 3}
     - target: {fileID: 8439083732081872446, guid: fe1bb35ef201521b1830d9c87b0ff840,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
       objectReference: {fileID: 0}
     - target: {fileID: 8439083732081872446, guid: fe1bb35ef201521b1830d9c87b0ff840,
         type: 3}
@@ -8206,7 +8226,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: 242e04f509b9d5a09a3864729e5105a2,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorType
@@ -8215,7 +8236,7 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
       objectReference: {fileID: 0}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -8820,7 +8841,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5022602860645237092, guid: 242e04f509b9d5a09a3864729e5105a2,
+        type: 3}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorType
@@ -8829,7 +8851,7 @@ PrefabInstance:
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_BehaviorName
-      value: VisualAgent_PPO_NOBC
+      value: VisualAgent_SAC_NOBC
       objectReference: {fileID: 0}
     - target: {fileID: 1513674004484776567, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
