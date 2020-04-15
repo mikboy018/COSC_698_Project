@@ -66,6 +66,8 @@ public class VisualAgent_FPS : Agent
     float prevXdir = 0f;
     float prevZdir = 0f;
 
+    public int scaleFactor = 10; // added 11 Apr IAW SAC paper stating a scaling factor might be needed to encourage exploration
+
     void Start(){
         animator = GetComponentInChildren<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -246,7 +248,7 @@ public class VisualAgent_FPS : Agent
         xRot -= lookV;
         
         if(Mathf.Abs(xRot) > 20){
-            AddReward(-0.05f);
+            AddReward(-0.05f*scaleFactor);
         }
 
         xRot = Mathf.Clamp(xRot, -45f, 45f);
@@ -276,14 +278,14 @@ public class VisualAgent_FPS : Agent
         // updated 2 Apr to match F1 more closely
         var xDist = Mathf.Abs(xDir - prevXdir);
         if(xDist > 0)
-            AddReward(Mathf.Clamp(0.000045f*xDist, 0f, 8f)); // smaller values to encoure more forward motion
+            AddReward(scaleFactor*Mathf.Clamp(0.000045f*xDist, 0f, 8f)); // smaller values to encoure more forward motion
 
         var zDist = Mathf.Abs(zDir - prevZdir);
         if(zDist > 0)
-            AddReward(Mathf.Clamp(0.00009f*zDist, 0f, 15f));
+            AddReward(scaleFactor*Mathf.Clamp(0.00009f*zDist, 0f, 15f));
 
         if(xDist == 0 && zDist==0)
-            AddReward(-0.03f); // match f1 penalty for not moving
+            AddReward(scaleFactor*-0.03f); // match f1 penalty for not moving
         // store last value
         prevXdir = xDir;
         prevZdir = zDir;
@@ -310,7 +312,7 @@ public class VisualAgent_FPS : Agent
                 ammoCount -= 1;
                 float reward = 0.0001f * (maxAmmoCount-ammoCount)/maxAmmoCount; // increases penalty as ammo lower
                  if(ammoCount <= 0){
-                    AddReward(-0.05f); // penalty for running out of ammo
+                    AddReward(scaleFactor*-0.05f); // penalty for running out of ammo
                 }
                 // updated to match F1 -- agents learned to not shoot with this high of a reward
                 //AddReward(-0.04f);
@@ -322,7 +324,7 @@ public class VisualAgent_FPS : Agent
     public override void AgentAction(float[] vectorAction)
     {
         // matching F1 AddReward(-1f / maxStep); // motivate AI to find positive reward faster
-        AddReward(-0.008f);
+        AddReward(scaleFactor*-0.008f);
         MoveAgent(vectorAction);
     }
 
@@ -434,14 +436,14 @@ public class VisualAgent_FPS : Agent
         // reward player for picking up health/ammo
          if (collision.gameObject.CompareTag("healthPack") || collision.gameObject.CompareTag("ammoPack"))
         {
-            AddReward(.15f); // 2 apr was 1f, updated to align with F1 ammo pickup
+            AddReward(scaleFactor*.15f); // 2 apr was 1f, updated to align with F1 ammo pickup
         }
     } 
 
     public bool SetHealth(int damage){
         health -= damage;
         if(damage < 0) // penalty for taking damage
-            AddReward(0.05f*damage);
+            AddReward(scaleFactor*0.05f*damage);
         if(health <= 0){
             //AddReward(-0.5f); // motivate AI to not die -- removed to align with f1, placing -0.05 penalty * projectile damage
             //AgentReset();
@@ -477,7 +479,7 @@ public class VisualAgent_FPS : Agent
             numKills = 0;
             Debug.Log("Player: " + gameObject.name + " Total deaths: " + deathCount);
             deathCount = 0;
-            AddReward(5f); // won the match
+            AddReward(scaleFactor*5f); // won the match
             //AgentReset();
             //Done();
             manager.GetComponent<GameManager>().ResetScenario();
