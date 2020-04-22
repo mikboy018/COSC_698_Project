@@ -45,13 +45,16 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="\home\mike\Apps\Unity\ml-agents-master\com.unity.ml-agents\Editor\AgentEditor.cs" />
-     <Compile Include="\home\mike\Apps\Unity\ml-agents-master\com.unity.ml-agents\Editor\BehaviorParametersEditor.cs" />
-     <Compile Include="\home\mike\Apps\Unity\ml-agents-master\com.unity.ml-agents\Editor\BrainParametersDrawer.cs" />
-     <Compile Include="\home\mike\Apps\Unity\ml-agents-master\com.unity.ml-agents\Editor\DemonstrationDrawer.cs" />
-     <Compile Include="\home\mike\Apps\Unity\ml-agents-master\com.unity.ml-agents\Editor\DemonstrationImporter.cs" />
-     <Compile Include="\home\mike\Apps\Unity\ml-agents-master\com.unity.ml-agents\Editor\RayPerceptionSensorComponentBaseEditor.cs" />
-     <None Include="\home\mike\Apps\Unity\ml-agents-master\com.unity.ml-agents\Editor\Unity.ML-Agents.Editor.asmdef" />
+     <Compile Include="\home\mike\Apps\Unity\ml-agents-0.15.1\com.unity.ml-agents\Editor\AgentEditor.cs" />
+     <Compile Include="\home\mike\Apps\Unity\ml-agents-0.15.1\com.unity.ml-agents\Editor\BehaviorParametersEditor.cs" />
+     <Compile Include="\home\mike\Apps\Unity\ml-agents-0.15.1\com.unity.ml-agents\Editor\BrainParametersDrawer.cs" />
+     <Compile Include="\home\mike\Apps\Unity\ml-agents-0.15.1\com.unity.ml-agents\Editor\CameraSensorComponentEditor.cs" />
+     <Compile Include="\home\mike\Apps\Unity\ml-agents-0.15.1\com.unity.ml-agents\Editor\DemonstrationDrawer.cs" />
+     <Compile Include="\home\mike\Apps\Unity\ml-agents-0.15.1\com.unity.ml-agents\Editor\DemonstrationImporter.cs" />
+     <Compile Include="\home\mike\Apps\Unity\ml-agents-0.15.1\com.unity.ml-agents\Editor\EditorUtilities.cs" />
+     <Compile Include="\home\mike\Apps\Unity\ml-agents-0.15.1\com.unity.ml-agents\Editor\RayPerceptionSensorComponentBaseEditor.cs" />
+     <Compile Include="\home\mike\Apps\Unity\ml-agents-0.15.1\com.unity.ml-agents\Editor\RenderTextureSensorComponentEditor.cs" />
+     <None Include="\home\mike\Apps\Unity\ml-agents-0.15.1\com.unity.ml-agents\Editor\Unity.ML-Agents.Editor.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>/media/mike/Donut/Apps/Unity/2019.3.0f6/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
@@ -250,23 +253,23 @@
  <Reference Include="UnityEditor.Android.Extensions">
  <HintPath>/media/mike/Donut/Apps/Unity/2019.3.0f6/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll</HintPath>
  </Reference>
+ <Reference Include="Google.Protobuf">
+ <HintPath>/home/mike/Documents/School/698/MLAgent/MLBots/Library/PackageCache/com.unity.barracuda@0.6.1-preview/Barracuda/Plugins/ProtoBuffer/Google.Protobuf.dll</HintPath>
+ </Reference>
  <Reference Include="Unity.Burst.Unsafe">
  <HintPath>/home/mike/Documents/School/698/MLAgent/MLBots/Library/PackageCache/com.unity.burst@1.1.1/Unity.Burst.Unsafe.dll</HintPath>
  </Reference>
- <Reference Include="System.IO.Abstractions.TestingHelpers">
- <HintPath>/home/mike/Apps/Unity/ml-agents-master/com.unity.ml-agents/Plugins/System.IO.Abstractions.TestingHelpers.dll</HintPath>
- </Reference>
- <Reference Include="Google.Protobuf">
- <HintPath>/home/mike/Documents/School/698/MLAgent/MLBots/Library/PackageCache/com.unity.barracuda@0.6.0-preview/Barracuda/Plugins/ProtoBuffer/Google.Protobuf.dll</HintPath>
- </Reference>
  <Reference Include="System.IO.Abstractions">
- <HintPath>/home/mike/Apps/Unity/ml-agents-master/com.unity.ml-agents/Plugins/System.IO.Abstractions.dll</HintPath>
+ <HintPath>/home/mike/Apps/Unity/ml-agents-0.15.1/com.unity.ml-agents/Plugins/System.IO.Abstractions.dll</HintPath>
  </Reference>
- <Reference Include="System.Interactive.Async">
- <HintPath>/home/mike/Apps/Unity/ml-agents-master/com.unity.ml-agents/Plugins/ProtoBuffer/System.Interactive.Async.dll</HintPath>
+ <Reference Include="System.IO.Abstractions.TestingHelpers">
+ <HintPath>/home/mike/Apps/Unity/ml-agents-0.15.1/com.unity.ml-agents/Plugins/System.IO.Abstractions.TestingHelpers.dll</HintPath>
  </Reference>
  <Reference Include="Grpc.Core">
- <HintPath>/home/mike/Apps/Unity/ml-agents-master/com.unity.ml-agents/Plugins/ProtoBuffer/Grpc.Core.dll</HintPath>
+ <HintPath>/home/mike/Apps/Unity/ml-agents-0.15.1/com.unity.ml-agents/Plugins/ProtoBuffer/Grpc.Core.dll</HintPath>
+ </Reference>
+ <Reference Include="System.Interactive.Async">
+ <HintPath>/home/mike/Apps/Unity/ml-agents-0.15.1/com.unity.ml-agents/Plugins/ProtoBuffer/System.Interactive.Async.dll</HintPath>
  </Reference>
  <Reference Include="nunit.framework">
  <HintPath>/home/mike/Documents/School/698/MLAgent/MLBots/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>

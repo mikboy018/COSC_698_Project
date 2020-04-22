@@ -468,6 +468,11 @@ PrefabInstance:
       propertyPath: scaleFactor
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9000829428488901708, guid: a7c5bc515395531eda4935eb26137df0,
+        type: 3}
+      propertyPath: m_TargetDisplay
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7c5bc515395531eda4935eb26137df0, type: 3}
 --- !u!1001 &181975268
@@ -712,7 +717,7 @@ PrefabInstance:
     - target: {fileID: 9000829428488901708, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_TargetDisplay
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7c5bc515395531eda4935eb26137df0, type: 3}
@@ -857,6 +862,11 @@ PrefabInstance:
     - target: {fileID: 8940521734564430579, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: scaleFactor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9000829428488901708, guid: a7c5bc515395531eda4935eb26137df0,
+        type: 3}
+      propertyPath: m_TargetDisplay
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1635,7 +1645,7 @@ PrefabInstance:
     - target: {fileID: 9000829428488901708, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_TargetDisplay
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7c5bc515395531eda4935eb26137df0, type: 3}
@@ -1880,7 +1890,7 @@ PrefabInstance:
     - target: {fileID: 9000829428488901708, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_TargetDisplay
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7c5bc515395531eda4935eb26137df0, type: 3}
@@ -4846,6 +4856,11 @@ PrefabInstance:
       propertyPath: scaleFactor
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8940521734564430579, guid: a7c5bc515395531eda4935eb26137df0,
+        type: 3}
+      propertyPath: playerControl
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9000829428488901708, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_TargetDisplay
@@ -5403,7 +5418,7 @@ PrefabInstance:
     - target: {fileID: 9000829428488901708, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_TargetDisplay
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7c5bc515395531eda4935eb26137df0, type: 3}
@@ -5523,7 +5538,7 @@ PrefabInstance:
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
       propertyPath: m_Name
-      value: Agent (2)-PPO-R2
+      value: Agent (2)-SAC-R2
       objectReference: {fileID: 0}
     - target: {fileID: 8922367668442985180, guid: a7c5bc515395531eda4935eb26137df0,
         type: 3}
@@ -5554,6 +5569,11 @@ PrefabInstance:
         type: 3}
       propertyPath: scaleFactor
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9000829428488901708, guid: a7c5bc515395531eda4935eb26137df0,
+        type: 3}
+      propertyPath: m_TargetDisplay
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7c5bc515395531eda4935eb26137df0, type: 3}

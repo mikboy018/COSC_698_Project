@@ -68,6 +68,8 @@ public class VisualAgent_FPS : Agent
 
     public int scaleFactor = 10; // added 11 Apr IAW SAC paper stating a scaling factor might be needed to encourage exploration
 
+    public bool resetCameraAngle = false;
+
     void Start(){
         animator = GetComponentInChildren<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -103,16 +105,14 @@ public class VisualAgent_FPS : Agent
 
     public void MoveAgent(float[] act)
     {
-        //model.transform.localPosition = new Vector3(0,-3.25f,0);
-        //model.transform.rotation = transform.rotation;
         var camAngle = agentCamera.transform.localRotation;
         camAngle.y = 0;
         agentCamera.transform.localRotation = camAngle;
-        //var dirToGo = Vector3.zero;
+
         var zDir = 0.0f;
         var xDir = 0.0f;
         var yDir = 0.0f;
-        //var strafeDir = Vector3.zero;
+
 
         var navigation = Mathf.FloorToInt(act[0]);
         var jumpCrouch = Mathf.FloorToInt(act[1]);
@@ -246,12 +246,12 @@ public class VisualAgent_FPS : Agent
         }
 
         xRot -= lookV;
-        
-        if(Mathf.Abs(xRot) > 20){
+    
+        xRot = Mathf.Clamp(xRot, -45f, 45f);
+
+        if(xRot > 20f || xRot < -20f){
             AddReward(-0.05f*scaleFactor);
         }
-
-        xRot = Mathf.Clamp(xRot, -45f, 45f);
 
         agentCamera.transform.localRotation = Quaternion.Euler(xRot, 0f, 0f);
         transform.Rotate(Vector3.up, lookH);
@@ -264,17 +264,8 @@ public class VisualAgent_FPS : Agent
         // update animation states
         animator.SetBool("running", walk);
         animator.SetBool("jumping", jump);
-        //animator.SetBool("crouching", crouch);
         animator.SetBool("shooting", fire);
 
-        // Navigation
-/*         if(xDir == 0 || zDir == 0){
-            AddReward(-0.01f);
-        } */
-        
-        /*if(xDir != 0 || zDir != 0){
-            AddReward(0.01f);
-        }*/
         // updated 2 Apr to match F1 more closely
         var xDist = Mathf.Abs(xDir - prevXdir);
         if(xDist > 0)
@@ -363,10 +354,7 @@ public class VisualAgent_FPS : Agent
             //return new float[] { 5 }; // Jump
             jumpCrouchAction = 1;
         }
-/*         if (Input.GetKey(KeyCode.C)){
-            //return new float[] { 6 }; // Crouch
-            jumpCrouchAction = 2;
-        } */
+
         if (Input.GetKey(KeyCode.Mouse0)){
             //return new float[] { 7 };  // Fire
             shootAction = 1;
@@ -396,8 +384,11 @@ public class VisualAgent_FPS : Agent
 
     public override void AgentReset()
     {   
+        if(matchNum != 0)
+            Debug.Log("Agent: " + name + ", kills: " + numKills + ", deaths: " + deathCount);
         numKills = 0;
-        agentCamera.transform.localRotation = Quaternion.Euler(-80,0,0);
+        deathCount = 0;
+        agentCamera.transform.localRotation = Quaternion.Euler(0,0,0);
         matchNum++; // shows how many times a match has completed (10 frags to first player)
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
         var items = enumerable.ToArray();
@@ -426,6 +417,9 @@ public class VisualAgent_FPS : Agent
         var enumerable = Enumerable.Range(0, 9).OrderBy(x => Guid.NewGuid()).Take(9);
         var items = enumerable.ToArray();
         m_AgentRb.velocity = Vector3.zero;
+        if(resetCameraAngle){
+            agentCamera.transform.localRotation = Quaternion.Euler(0,0,0);
+        }
         transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
         m_MyArea.PlaceObject(gameObject, items[0]);
     }
@@ -450,16 +444,7 @@ public class VisualAgent_FPS : Agent
             deathCount++;
             health = 100;
             ammoCount = maxAmmoCount;
-            //numDeaths++;
-            //Debug.Log(gameObject.name + ", was killed");
-            //if(deathCount == 10){
-                //deathCount = 0;
-                //AgentReset();
-                
-            //} else{
-                respawn();
-                
-            //}
+            respawn();
 
             return true;
         }
@@ -474,14 +459,11 @@ public class VisualAgent_FPS : Agent
     public void AddScore(int increment){
         score += increment;
         if(numKills == 10){
-            //numKills = 0;
-            Debug.Log("Player: " + gameObject.name + " Kills this Round: " + numKills);
-            numKills = 0;
-            Debug.Log("Player: " + gameObject.name + " Total deaths: " + deathCount);
-            deathCount = 0;
+
+            Debug.Log("Player: " + gameObject.name + " wins match: " + matchNum);
+
             AddReward(scaleFactor*5f); // won the match
-            //AgentReset();
-            //Done();
+
             manager.GetComponent<GameManager>().ResetScenario();
         }
     }

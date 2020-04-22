@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/VisualTrainer_Platforms_Basic.unity
+- path: Assets/Scenes/R3Trainer.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
