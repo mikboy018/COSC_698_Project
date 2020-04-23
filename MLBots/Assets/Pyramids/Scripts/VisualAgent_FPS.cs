@@ -53,7 +53,7 @@ public class VisualAgent_FPS : Agent
     public GameObject model;
 
     public int score = 0;
-    int angleCount = 0;
+    //int angleCount = 0;
 
     float xRot = 0f;
 
@@ -76,9 +76,10 @@ public class VisualAgent_FPS : Agent
         agentCamera.transform.localRotation = Quaternion.Euler(-80,0,0);
     }
 
-    public override void InitializeAgent()
+    public override void Initialize() //22 apr update InitializeAgent()
     {
-        base.InitializeAgent();
+        //base.InitializeAgent();
+        base.Initialize();
         m_AgentRb = GetComponent<Rigidbody>();
         m_MyArea = area.GetComponent<PyramidArea>();
         //m_SwitchLogic = areaSwitch.GetComponent<PyramidSwitch>();
@@ -111,7 +112,7 @@ public class VisualAgent_FPS : Agent
 
         var zDir = 0.0f;
         var xDir = 0.0f;
-        var yDir = 0.0f;
+        //var yDir = 0.0f;
 
 
         var navigation = Mathf.FloorToInt(act[0]);
@@ -312,7 +313,7 @@ public class VisualAgent_FPS : Agent
         }
     }
 
-    public override void AgentAction(float[] vectorAction)
+    public override void OnActionReceived(float[] vectorAction)//AgentAction(float[] vectorAction)
     {
         // matching F1 AddReward(-1f / maxStep); // motivate AI to find positive reward faster
         AddReward(scaleFactor*-0.008f);
@@ -382,7 +383,7 @@ public class VisualAgent_FPS : Agent
         return new float[] { navAction, jumpCrouchAction, shootAction, lookLR, lookUD };
     }
 
-    public override void AgentReset()
+    public override void OnEpisodeBegin()//AgentReset()
     {   
         if(matchNum != 0)
             Debug.Log("Agent: " + name + ", kills: " + numKills + ", deaths: " + deathCount);

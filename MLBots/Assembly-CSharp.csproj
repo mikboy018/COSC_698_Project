@@ -61,7 +61,6 @@
      <Compile Include="Assets\SharedAssets\Scripts\FlyCamera.cs" />
      <Compile Include="Assets\SharedAssets\Scripts\GroundContact.cs" />
      <Compile Include="Assets\SharedAssets\Scripts\JointDriveController.cs" />
-     <Compile Include="Assets\SharedAssets\Scripts\ModelOverrider.cs" />
      <Compile Include="Assets\SharedAssets\Scripts\Monitor.cs" />
      <Compile Include="Assets\SharedAssets\Scripts\ProjectSettingsOverrides.cs" />
      <Compile Include="Assets\SharedAssets\Scripts\TargetContact.cs" />

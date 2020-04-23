@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour
     public int damage = 50;
     public float speed = 10;
     public bool playerKilled = false;
-    bool playerHit = false;
+    //bool playerHit = false;
 
     public GameObject parentAgent; // agent who fired the shot, for scoring
 

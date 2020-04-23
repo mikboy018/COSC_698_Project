@@ -9,7 +9,8 @@ public class GameManager : MonoBehaviour
     // Calls "Done()" for each agent
     public void ResetScenario(){
         for(int i = 0; i < agents.Count; i++){
-            agents[i].GetComponent<VisualAgent_FPS>().Done();
+            //agents[i].GetComponent<VisualAgent_FPS>().Done(); -updated 22 apr
+            agents[i].GetComponent<VisualAgent_FPS>().EndEpisode();
         }
     }
 }
