@@ -443,11 +443,16 @@ public class VisualAgent_FPS : Agent
             //AddReward(-0.5f); // motivate AI to not die -- removed to align with f1, placing -0.05 penalty * projectile damage
             //AgentReset();
             deathCount++;
+            manager.GetComponent<GameManager>().updateScore(gameObject.name, "death");
             health = 100;
             ammoCount = maxAmmoCount;
             respawn();
 
             return true;
+        }
+
+        if(damage < 0){
+            manager.GetComponent<GameManager>().updateScore(gameObject.name, "health");
         }
 
         if(health >= 100){
@@ -459,6 +464,7 @@ public class VisualAgent_FPS : Agent
 
     public void AddScore(int increment){
         score += increment;
+        manager.GetComponent<GameManager>().updateScore(gameObject.name, "kill");
         if(numKills == 10){
 
             Debug.Log("Player: " + gameObject.name + " wins match: " + matchNum);
@@ -471,7 +477,7 @@ public class VisualAgent_FPS : Agent
 
     public void SetAmmo(int ammo){
         ammoCount += ammo;
-
+        manager.GetComponent<GameManager>().updateScore(gameObject.name, "ammo");
         if(ammoCount >= maxAmmoCount){
             ammoCount = maxAmmoCount;
         }
